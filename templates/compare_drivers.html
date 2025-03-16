@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compare Drivers</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <h1>Compare Drivers</h1>
+    <table>
+        <tbody>
+            <tr>
+                <td>Name</td>
+                <td>{{ driver1_stats.name }}</td>
+                <td>{{ driver2_stats.name }}</td>
+            </tr>
+            <tr>
+                <td>Age</td>
+                <td class="{% if driver1_stats.age < driver2_stats.age %}highlight{% endif %}">{{ driver1_stats.age }}</td>
+                <td class="{% if driver2_stats.age < driver1_stats.age %}highlight{% endif %}">{{ driver2_stats.age }}</td>
+            </tr>
+            <tr>
+                <td>Total Pole Positions</td>
+                <td class="{% if driver1_stats.total_pole_positions > driver2_stats.total_pole_positions %}highlight{% endif %}">{{ driver1_stats.total_pole_positions }}</td>
+                <td class="{% if driver2_stats.total_pole_positions > driver1_stats.total_pole_positions %}highlight{% endif %}">{{ driver2_stats.total_pole_positions }}</td>
+            </tr>
+            <tr>
+                <td>Total Race Wins</td>
+                <td class="{% if driver1_stats.total_race_wins > driver2_stats.total_race_wins %}highlight{% endif %}">{{ driver1_stats.total_race_wins }}</td>
+                <td class="{% if driver2_stats.total_race_wins > driver1_stats.total_race_wins %}highlight{% endif %}">{{ driver2_stats.total_race_wins }}</td>
+            </tr>
+            <tr>
+                <td>Total Points Scored</td>
+                <td class="{% if driver1_stats.total_points_scored > driver2_stats.total_points_scored %}highlight{% endif %}">{{ driver1_stats.total_points_scored }}</td>
+                <td class="{% if driver2_stats.total_points_scored > driver1_stats.total_points_scored %}highlight{% endif %}">{{ driver2_stats.total_points_scored }}</td>
+            </tr>
+            <tr>
+                <td>Total World Titles</td>
+                <td class="{% if driver1_stats.total_world_titles > driver2_stats.total_world_titles %}highlight{% endif %}">{{ driver1_stats.total_world_titles }}</td>
+                <td class="{% if driver2_stats.total_world_titles > driver1_stats.total_world_titles %}highlight{% endif %}">{{ driver2_stats.total_world_titles }}</td>
+            </tr>
+            <tr>
+                <td>Total Fastest Laps</td>
+                <td class="{% if driver1_stats.total_fastest_laps > driver2_stats.total_fastest_laps %}highlight{% endif %}">{{ driver1_stats.total_fastest_laps }}</td>
+                <td class="{% if driver2_stats.total_fastest_laps > driver1_stats.total_fastest_laps %}highlight{% endif %}">{{ driver2_stats.total_fastest_laps }}</td>
+            </tr>
+        </tbody>
+        <thead>
+            <tr>
+                <th>Stat</th>
+                <th>Driver 1</th>
+                <th>Driver 2</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Logic to display driver stats will go here -->
+        </tbody>
+    </table>
+</body>
+</html>

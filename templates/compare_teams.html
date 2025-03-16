@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compare Teams</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <h1>Compare Teams</h1>
+    <table>
+        <tbody>
+            <tr>
+                <td>Name</td>
+                <td>{{ team1_stats.name }}</td>
+                <td>{{ team2_stats.name }}</td>
+            </tr>
+            <tr>
+                <td>Year Founded</td>
+                <td class="{% if team1_stats.year_founded < team2_stats.year_founded %}highlight{% endif %}">{{ team1_stats.year_founded }}</td>
+                <td class="{% if team2_stats.year_founded < team1_stats.year_founded %}highlight{% endif %}">{{ team2_stats.year_founded }}</td>
+            </tr>
+            <tr>
+                <td>Total Pole Positions</td>
+                <td class="{% if team1_stats.total_pole_positions > team2_stats.total_pole_positions %}highlight{% endif %}">{{ team1_stats.total_pole_positions }}</td>
+                <td class="{% if team2_stats.total_pole_positions > team1_stats.total_pole_positions %}highlight{% endif %}">{{ team2_stats.total_pole_positions }}</td>
+            </tr>
+            <tr>
+                <td>Total Race Wins</td>
+                <td class="{% if team1_stats.total_race_wins > team2_stats.total_race_wins %}highlight{% endif %}">{{ team1_stats.total_race_wins }}</td>
+                <td class="{% if team2_stats.total_race_wins > team1_stats.total_race_wins %}highlight{% endif %}">{{ team2_stats.total_race_wins }}</td>
+            </tr>
+            <tr>
+                <td>Total Constructor Titles</td>
+                <td class="{% if team1_stats.total_constructor_titles > team2_stats.total_constructor_titles %}highlight{% endif %}">{{ team1_stats.total_constructor_titles }}</td>
+                <td class="{% if team2_stats.total_constructor_titles > team1_stats.total_constructor_titles %}highlight{% endif %}">{{ team2_stats.total_constructor_titles }}</td>
+            </tr>
+            <tr>
+                <td>Finishing Position Previous Season</td>
+                <td class="{% if team1_stats.finishing_position_previous_season < team2_stats.finishing_position_previous_season %}highlight{% endif %}">{{ team1_stats.finishing_position_previous_season }}</td>
+                <td class="{% if team2_stats.finishing_position_previous_season < team1_stats.finishing_position_previous_season %}highlight{% endif %}">{{ team2_stats.finishing_position_previous_season }}</td>
+            </tr>
+        </tbody>
+        <thead>
+            <tr>
+                <th>Stat</th>
+                <th>Team 1</th>
+                <th>Team 2</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Logic to display team stats will go here -->
+        </tbody>
+    </table>
+</body>
+</html>
