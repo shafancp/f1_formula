@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Driver</title>
+</head>
+<body>
+    <h2>Drivers</h2>
+    <form id="driver-query-form" onsubmit="queryDrivers(event)">
+        <label for="driver-attribute">Select Attribute:</label>
+        <select id="driver-attribute">
+            <option value="name">Driver Name</option>
+            <option value="score">Score</option>
+            <!-- Add more attributes as needed -->
+        </select>
+        
+        <label for="driver-comparison-value">Value:</label>
+        <input type="text" id="driver-comparison-value" required>
+        
+        <label for="driver-comparison-type">Comparison:</label>
+        <select id="driver-comparison-type">
+            <option value="lessThan">Less Than</option>
+            <option value="greaterThan">Greater Than</option>
+            <option value="equal">Equal</option>
+        </select>
+        
+        <button type="submit">Query Drivers</button>
+    </form>
+    <div id="driver-query-results"></div>
+    <input type="text" id="search-bar" placeholder="Search drivers..." onkeyup="searchDrivers()">
+    <table id="drivers-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Team</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for driver in drivers %}
+                <tr>
+                    <td><a href="/driver_details?id={{ driver.id }}">{{ driver.name }}</a></td>
+                    <td>{{ driver.team }}</td>
+                    <td>
+                        {% if is_logged_in %}
+                            <button onclick="deleteDriver('{{ driver.id }}')">Delete</button>
+                        {% else %}
+                            <button disabled>Delete</button>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <script>
+        function queryDrivers(event) {
+            event.preventDefault(); // Prevent form submission
+            const attribute = document.getElementById('driver-attribute').value;
+            const comparisonValue = document.getElementById('driver-comparison-value').value;
+            const comparisonType = document.getElementById('driver-comparison-type').value;
+            const resultsDiv = document.getElementById('driver-query-results');
+            resultsDiv.innerHTML = ''; // Clear previous results
+
+            // Logic to filter drivers based on the selected criteria
+            const drivers = []; // Replace with actual drivers data
+            const filteredDrivers = drivers.filter(driver => {
+                // Implement comparison logic based on attribute and comparisonType
+                // Example:
+                // if (comparisonType === 'lessThan') { ... }
+                // if (comparisonType === 'greaterThan') { ... }
+                // if (comparisonType === 'equal') { ... }
+            });
+
+            // Display the filtered drivers
+            if (filteredDrivers.length > 0) {
+                const list = document.createElement('ul');
+                filteredDrivers.forEach(driver => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = driver.name; // Adjust based on driver object structure
+                    list.appendChild(listItem);
+                });
+                resultsDiv.appendChild(list);
+            } else {
+                resultsDiv.textContent = 'No drivers found.';
+            }
+        }
+        function searchDrivers() {
+            const input = document.getElementById('search-bar');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('drivers-table');
+            const tr = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < tr.length; i++) { // Start from 1 to skip the header row
+                const tdName = tr[i].getElementsByTagName('td')[0];
+                const tdTeam = tr[i].getElementsByTagName('td')[1];
+                if (tdName || tdTeam) {
+                    const txtValueName = tdName.textContent || tdName.innerText;
+                    const txtValueTeam = tdTeam.textContent || tdTeam.innerText;
+                    if (txtValueName.toLowerCase().indexOf(filter) > -1 || txtValueTeam.toLowerCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

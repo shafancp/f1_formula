@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Details</title>
+</head>
+<body>
+    <h2>Driver Details</h2>
+    <div id="driver-info">
+        {% if is_logged_in %}
+            <button onclick="location.href='/edit_driver?id={{ driver.id }}'">Edit</button>
+            <form method="post" action="/delete_driver/{{ driver.id }}">
+                <button type="submit">Delete</button>
+            </form>
+        {% endif %}
+        <p><strong>Name:</strong> {{ driver.name }}</p>
+        <p><strong>Age:</strong> {{ driver.age }}</p>
+        <p><strong>Total Pole Positions:</strong> {{ driver.total_pole_positions }}</p>
+        <p><strong>Total Race Wins:</strong> {{ driver.total_race_wins }}</p>
+        <p><strong>Total Points:</strong> {{ driver.total_points }}</p>
+        <p><strong>Total World Titles:</strong> {{ driver.total_world_titles }}</p>
+        <p><strong>Total Fastest Laps:</strong> {{ driver.total_fastest_laps }}</p>
+        <p><strong>Team:</strong> {{ driver.team }}</p>
+    </div>
+</body>
+</html>

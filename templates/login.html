@@ -1,9 +1,23 @@
-<div id="login-box">
-    <input type="email" id="email" placeholder="Enter Email">
-    <input type="password" id="password" placeholder="Enter Password">
-    <button id="login">Login</button>
-    <button id="sign-up">Register</button>
-</div>
-<button id="sign-out" hidden>Logout</button>
-
-<script type="module" src="/static/firebase-login.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script type="module" src="{{ url_for('static', path='/firebase-login.js') }}"></script>
+</head>
+<body>
+    <h1>Login</h1>
+    <form id="login-form">
+        <label for="email">Email:</label>
+        <input type="email" id="email" required>
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" required>
+        <br>
+        <button type="button" id="login">Login</button>
+        <button type="button" id="sign-up">Sign Up</button>
+    </form>
+    <a href="/">Back to Home</a>
+</body>
+</html>

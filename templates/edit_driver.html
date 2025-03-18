@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Driver</title>
+</head>
+<body>
+    <h2>Edit Driver</h2>
+    <form method="post" action="/edit_driver/{{ driver['id'] }}">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="{{ driver.name }}" required>
+        
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" value="{{ driver.age }}" required>
+        
+        <label for="total_pole_positions">Total Pole Positions:</label>
+        <input type="number" id="total_pole_positions" name="total_pole_positions" value="{{ driver.total_pole_positions }}" required>
+        
+        <label for="total_race_wins">Total Race Wins:</label>
+        <input type="number" id="total_race_wins" name="total_race_wins" value="{{ driver.total_race_wins }}" required>
+        
+        <label for="total_points">Total Points:</label>
+        <input type="number" id="total_points" name="total_points" value="{{ driver.total_points }}" required>
+        
+        <label for="total_world_titles">Total World Titles:</label>
+        <input type="number" id="total_world_titles" name="total_world_titles" value="{{ driver.total_world_titles }}" required>
+        
+        <label for="total_fastest_laps">Total Fastest Laps:</label>
+        <input type="number" id="total_fastest_laps" name="total_fastest_laps" value="{{ driver.total_fastest_laps }}" required>
+        
+        <label for="team">Team:</label>
+        <input type="text" id="team" name="team" value="{{ driver.team }}" required>
+        
+        <button type="submit">Update Driver</button>
+    </form>
+</body>
+</html>
