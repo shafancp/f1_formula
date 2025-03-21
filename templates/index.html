@@ -27,31 +27,7 @@
             </div>
         {% endif %}
     </div>
-    <a href="/view_driver">Driver</a>
-    
-
-    <h2>Teams</h2>
-    <table id="teams-table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for team in teams %}
-                <tr>
-                    <td>{{ team.team_name }}</td>
-                    <td>
-                        {% if is_logged_in %}
-                            <button onclick="deleteTeam('{{ team.id }}')">Delete</button>
-                        {% else %}
-                            <button disabled>Delete</button>
-                        {% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <a href="/view_driver">Drivers</a><br>
+    <a href="/view_team">Teams</a>
 </body>
 </html>

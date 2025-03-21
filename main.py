@@ -1,11 +1,13 @@
 from fastapi import FastAPI, Request, Form, HTTPException 
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import google.oauth2.id_token
 from google.auth.transport import requests
 from google.cloud import firestore
 from google.auth.exceptions import TransportError, InvalidValue
+from google.cloud.firestore_v1.base_query import FieldFilter
+
 
 # Define the app
 app = FastAPI()
@@ -160,13 +162,64 @@ async def edit_driver(driver_id: str, request: Request):
 
     return {"message": "Driver updated successfully!"}
 
+@app.post("/query_driver")
+async def query_driver(request: Request):
+    # Read parameters from form data
+    form_data = await request.form()
+    attribute = form_data.get("attribute")
+    comparison = form_data.get("comparison")
+    value = form_data.get("value")
+
+    if not attribute or not comparison or not value:
+        return JSONResponse(content={"error": "Missing parameters"}, status_code=400)
+
+    # Convert value to number if applicable
+    try:
+        value = int(value)
+    except ValueError:
+        pass  # Keep as string if conversion fails
+
+    # Map comparison symbols to Firestore operators
+    comparison_operators = {
+        "=": "==",
+        "<": "<",
+        ">": ">"
+    }
+    # Validate comparison operator
+    if comparison not in comparison_operators:
+        return JSONResponse(content={"error": "Invalid comparison operator"}, status_code=400)
+
+    # Build Firestore query based on the provided parameters
+    driver_ref = db.collection("drivers")
+    query = driver_ref.where(attribute, comparison_operators[comparison], value)
+
+    # Fetch results
+    results = query.stream()
+    drivers = [{"id": doc.id, **doc.to_dict()} for doc in results]
+    return templates.TemplateResponse('view_driver.html', {
+        'request': request,
+        'drivers': drivers
+    })
+
+
+@app.get("/view_team", response_class=HTMLResponse)
+async def view_team(request: Request):
+    is_logged_in = await validate_token(request)
+    teams = db.collection('teams').stream()
+    team_list = [{**team.to_dict(), "id": team.id} for team in teams]
+    
+    return templates.TemplateResponse('view_team.html', {
+        'request': request,
+        'teams': team_list,
+        'is_logged_in': is_logged_in
+    })
 
 @app.get("/add_team", response_class=HTMLResponse)
 async def add_team(request: Request):
     if not await validate_token(request):
         raise HTTPException(status_code=403, detail="User not authenticated")
 
-    return templates.TemplateResponse('add_team.html', {'request': request})
+    return templates.TemplateResponse('view_driver.html', {'request': request})
 
 @app.post("/add_team")
 async def add_team_post(request: Request):
@@ -187,10 +240,18 @@ async def add_team_post(request: Request):
 
 @app.get("/compare_drivers", response_class=HTMLResponse)
 async def compare_drivers(request: Request):
-    return templates.TemplateResponse('compare_drivers.html', {'request': request})
+    driver1_id = request.query_params.get("driver1")
+    driver2_id = request.query_params.get("driver2")
+
+    driver1 = db.collection("drivers").document(driver1_id).get().to_dict()
+    driver2 = db.collection("drivers").document(driver2_id).get().to_dict()
+
+    return templates.TemplateResponse('compare_drivers.html', {
+        'request': request,
+        'driver1': driver1,
+        'driver2': driver2
+    })
 
 @app.get("/compare_teams", response_class=HTMLResponse)
 async def compare_teams(request: Request):
     return templates.TemplateResponse('compare_teams.html', {'request': request})
-
-
