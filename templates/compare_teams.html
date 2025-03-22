@@ -12,44 +12,34 @@
         <tbody>
             <tr>
                 <td>Name</td>
-                <td>{{ team1_stats.name }}</td>
-                <td>{{ team2_stats.name }}</td>
+                <td>{{ team1.team_name }}</td>
+                <td>{{ team2.team_name }}</td>
             </tr>
             <tr>
                 <td>Year Founded</td>
-                <td class="{% if team1_stats.year_founded < team2_stats.year_founded %}highlight{% endif %}">{{ team1_stats.year_founded }}</td>
-                <td class="{% if team2_stats.year_founded < team1_stats.year_founded %}highlight{% endif %}">{{ team2_stats.year_founded }}</td>
+                <td class="{% if  team1.year_founded < team2.year_founded %}highlight{% endif %}">{{ team1.year_founded  }}</td>
+                <td class="{% if  team2.year_founded < team1.year_founded %}highlight{% endif %}">{{ team2.year_founded  }}</td>
             </tr>
             <tr>
                 <td>Total Pole Positions</td>
-                <td class="{% if team1_stats.total_pole_positions > team2_stats.total_pole_positions %}highlight{% endif %}">{{ team1_stats.total_pole_positions }}</td>
-                <td class="{% if team2_stats.total_pole_positions > team1_stats.total_pole_positions %}highlight{% endif %}">{{ team2_stats.total_pole_positions }}</td>
+                <td class="{% if  team1.total_pole_positions > team2.total_pole_positions %}highlight{% endif %}">{{ team1.total_pole_positions  }}</td>
+                <td class="{% if  team2.total_pole_positions > team1.total_pole_positions %}highlight{% endif %}">{{ team2.total_pole_positions  }}</td>
             </tr>
             <tr>
                 <td>Total Race Wins</td>
-                <td class="{% if team1_stats.total_race_wins > team2_stats.total_race_wins %}highlight{% endif %}">{{ team1_stats.total_race_wins }}</td>
-                <td class="{% if team2_stats.total_race_wins > team1_stats.total_race_wins %}highlight{% endif %}">{{ team2_stats.total_race_wins }}</td>
+                <td class="{% if  team1.total_race_wins > team2.total_race_wins %}highlight{% endif %}">{{ team1.total_race_wins  }}</td>
+                <td class="{% if  team2.total_race_wins > team1.total_race_wins %}highlight{% endif %}">{{ team2.total_race_wins  }}</td>
             </tr>
             <tr>
                 <td>Total Constructor Titles</td>
-                <td class="{% if team1_stats.total_constructor_titles > team2_stats.total_constructor_titles %}highlight{% endif %}">{{ team1_stats.total_constructor_titles }}</td>
-                <td class="{% if team2_stats.total_constructor_titles > team1_stats.total_constructor_titles %}highlight{% endif %}">{{ team2_stats.total_constructor_titles }}</td>
+                <td class="{% if  team1.total_constructor_titles > team2.total_constructor_titles %}highlight{% endif %}">{{ team1.total_constructor_titles  }}</td>
+                <td class="{% if  team2.total_constructor_titles > team1.total_constructor_titles %}highlight{% endif %}">{{ team2.total_constructor_titles  }}</td>
             </tr>
             <tr>
                 <td>Finishing Position Previous Season</td>
-                <td class="{% if team1_stats.finishing_position_previous_season < team2_stats.finishing_position_previous_season %}highlight{% endif %}">{{ team1_stats.finishing_position_previous_season }}</td>
-                <td class="{% if team2_stats.finishing_position_previous_season < team1_stats.finishing_position_previous_season %}highlight{% endif %}">{{ team2_stats.finishing_position_previous_season }}</td>
+                <td class="{% if  team1.finishing_position < team2.finishing_position %}highlight{% endif %}">{{ team1.finishing_position  }}</td>
+                <td class="{% if  team2.finishing_position < team1.finishing_position %}highlight{% endif %}">{{ team2.finishing_position  }}</td>
             </tr>
-        </tbody>
-        <thead>
-            <tr>
-                <th>Stat</th>
-                <th>Team 1</th>
-                <th>Team 2</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Logic to display team stats will go here -->
         </tbody>
     </table>
 </body>

@@ -33,18 +33,7 @@ async def validate_token(request):
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
     is_logged_in = await validate_token(request)
-    drivers = db.collection('drivers').stream()
-    teams = db.collection('teams').stream()
-
-    driver_list = [{**driver.to_dict(), "id": driver.id} for driver in drivers]
-    team_list = [{**team.to_dict(), "id": team.id} for team in teams]
-
-    return templates.TemplateResponse('index.html', {
-        'request': request,
-        'drivers': driver_list,
-        'teams': team_list,
-        'is_logged_in': is_logged_in
-    })
+    return templates.TemplateResponse('index.html', {'request': request,'is_logged_in': is_logged_in})
 
 @app.get("/login", response_class=HTMLResponse)
 async def login(request: Request):
@@ -76,11 +65,12 @@ async def delete_driver(driver_id: str, request: Request):
     return RedirectResponse("/view_driver", status_code=303)
 
 @app.get("/add_driver", response_class=HTMLResponse)
-async def add_team(request: Request):
+async def add_driver(request: Request):
     if not await validate_token(request):
         raise HTTPException(status_code=403, detail="User not authenticated")
-
-    return templates.TemplateResponse('add_driver.html', {'request': request})
+    teams = db.collection('teams').stream()
+    team_list = [{**team.to_dict(), "id": team.id} for team in teams]
+    return templates.TemplateResponse('add_driver.html', {'request': request, 'teams' : team_list})
 
 @app.post("/add_driver")
 async def add_driver(request: Request):
@@ -99,7 +89,12 @@ async def add_driver(request: Request):
         "team": form.get("team")
     }
     db.collection('drivers').add(driver_data)
-    return {"message": "Driver added successfully!"}
+    return HTMLResponse("""
+    <script>
+        alert("Added Driver successfully!");
+        window.location.href = "/view_driver";
+    </script>
+    """)
 
 @app.get("/driver_details", response_class=HTMLResponse)
 async def driver_details(request: Request):
@@ -114,7 +109,13 @@ async def driver_details(request: Request):
     if not driver.exists:
         raise HTTPException(status_code=404, detail="Driver not found")
 
-    driver_data = {**driver.to_dict(), "id": driver.id}
+    driver_data = {**driver.to_dict(), "id": driver.id, "team_name": None}
+    
+    # Retrieve the team details
+    team_id = driver_data.get("team")
+    if team_id:
+        team_data = db.collection('teams').document(team_id).get().to_dict()
+        driver_data["team_name"] = team_data.get("team_name") if team_data else "Unknown Team"
     return templates.TemplateResponse('driver_details.html', {
         'request': request,
         'is_logged_in': is_logged_in,
@@ -219,7 +220,7 @@ async def add_team(request: Request):
     if not await validate_token(request):
         raise HTTPException(status_code=403, detail="User not authenticated")
 
-    return templates.TemplateResponse('view_driver.html', {'request': request})
+    return templates.TemplateResponse('add_team.html', {'request': request})
 
 @app.post("/add_team")
 async def add_team_post(request: Request):
@@ -254,4 +255,14 @@ async def compare_drivers(request: Request):
 
 @app.get("/compare_teams", response_class=HTMLResponse)
 async def compare_teams(request: Request):
-    return templates.TemplateResponse('compare_teams.html', {'request': request})
+    team1_id = request.query_params.get("team1")
+    team2_id = request.query_params.get("team2")
+
+    team1 = db.collection("teams").document(team1_id).get().to_dict()
+    team2 = db.collection("teams").document(team2_id).get().to_dict()
+
+    return templates.TemplateResponse('compare_teams.html', {
+        'request': request,
+        'team1': team1,
+        'team2': team2
+    })

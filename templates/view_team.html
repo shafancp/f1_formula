@@ -4,23 +4,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Team</title>
+    <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
     <h2>Teams</h2>
+    <input type="text" id="search-bar" placeholder="Search teams..." onkeyup="searchTeams()"><br>
+    <form action="/compare_teams" method="get">
+        <label for="team1">Select Team 1:</label>
+        <select name="team1" id="team1" required>
+            {% for team in teams %}
+                <option value="{{ team.id }}">{{ team.team_name }}</option>
+            {% endfor %}
+        </select>
+        
+        <label for="team2">Select Team 2:</label>
+        <select name="team2" id="team2" required>
+            {% for team in teams %}
+                <option value="{{ team.id }}">{{ team.team_name }}</option>
+            {% endfor %}
+        </select>
+        
+        <button type="submit">Compare Team</button>
+    </form>
+    <button onclick="location.href='/add_team'">Add Team</button>
+
     <table id="teams-table">
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Actions</th>
+                <th>Year Founded</th>
             </tr>
         </thead>
         <tbody>
             {% for team in teams %}
                 <tr>
                     <td>{{ team.team_name }}</td>
+                    <td>{{ team.year_founded}}</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+    <script>
+        function searchTeams() {
+            const input = document.getElementById('search-bar');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('teams-table');
+            const tr = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < tr.length; i++) { // Start from 1 to skip the header row
+                const tdName = tr[i].getElementsByTagName('td')[0];
+                if (tdName) {
+                    const txtValueName = tdName.textContent || tdName.innerText;
+                    if (txtValueName.toLowerCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
 </body>
 </html>

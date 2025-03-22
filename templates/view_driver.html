@@ -25,18 +25,17 @@
         
         <button type="submit">Compare Drivers</button>
     </form>
+    <button onclick="location.href='/add_driver'">Add Driver</button>
     <table id="drivers-table">
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Team</th>
             </tr>
         </thead>
         <tbody id="drivers-body">
             {% for driver in drivers %}
                 <tr>
                     <td><a href="/driver_details?id={{ driver.id }}">{{ driver.name }}</a></td>
-                    <td>{{ driver.team }}</td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -75,11 +74,9 @@
 
             for (let i = 1; i < tr.length; i++) { // Start from 1 to skip the header row
                 const tdName = tr[i].getElementsByTagName('td')[0];
-                const tdTeam = tr[i].getElementsByTagName('td')[1];
-                if (tdName || tdTeam) {
+                if (tdName) {
                     const txtValueName = tdName.textContent || tdName.innerText;
-                    const txtValueTeam = tdTeam.textContent || tdTeam.innerText;
-                    if (txtValueName.toLowerCase().indexOf(filter) > -1 || txtValueTeam.toLowerCase().indexOf(filter) > -1) {
+                    if (txtValueName.toLowerCase().indexOf(filter) > -1) {
                         tr[i].style.display = "";
                     } else {
                         tr[i].style.display = "none";

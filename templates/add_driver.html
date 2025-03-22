@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Driver</title>
+
 </head>
 <body>
     <h1>Add Driver</h1>
-    <form action="/add_driver" method="post">
+    <form action="/add_driver" method="post" id="add_driver" onsubmit="showAlert(event)">
         <label for="name">Driver Name:</label>
         <input type="text" id="name" name="name" required>
         <br>
@@ -30,7 +31,11 @@
         <input type="number" id="total_fastest_laps" name="total_fastest_laps" required>
         <br>
         <label for="team">Team:</label>
-        <input type="text" id="team" name="team" required>
+        <select name="team" id="team" required>
+            {% for team in teams %}
+                <option value="{{ team.id }}">{{ team.team_name }}</option>
+            {% endfor %}
+        </select>
         <br>
         <button type="submit">Add Driver</button>
     </form>
