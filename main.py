@@ -67,7 +67,7 @@ async def delete_driver(driver_id: str, request: Request):
 @app.get("/add_driver", response_class=HTMLResponse)
 async def add_driver(request: Request):
     if not await validate_token(request):
-        raise HTTPException(status_code=403, detail="User not authenticated")
+        return templates.TemplateResponse('login.html', {'request': request})
     teams = db.collection('teams').stream()
     team_list = [{**team.to_dict(), "id": team.id} for team in teams]
     return templates.TemplateResponse('add_driver.html', {'request': request, 'teams' : team_list})
@@ -228,17 +228,30 @@ async def add_team_post(request: Request):
     return {"message": "Team added successfully!"}
 
 @app.get("/compare_drivers", response_class=HTMLResponse)
-async def compare_drivers(request: Request):
-    driver1_id = request.query_params.get("driver1")
-    driver2_id = request.query_params.get("driver2")
+async def compare_drivers_get(request: Request):
+    drivers = db.collection('drivers').stream()
+    driver_list = [{**driver.to_dict(), "id": driver.id} for driver in drivers]
+    return templates.TemplateResponse('compare_drivers.html', {
+            'request': request,
+            'drivers': driver_list
+        })
+
+@app.post("/compare_drivers", response_class=HTMLResponse)
+async def compare_drivers_post(request: Request):
+    form_data = await request.form()
+    driver1_id = form_data.get("driver1")
+    driver2_id = form_data.get("driver2")
 
     driver1 = db.collection("drivers").document(driver1_id).get().to_dict()
     driver2 = db.collection("drivers").document(driver2_id).get().to_dict()
+    drivers = db.collection('drivers').stream()
+    driver_list = [{**driver.to_dict(), "id": driver.id} for driver in drivers]
 
     return templates.TemplateResponse('compare_drivers.html', {
         'request': request,
         'driver1': driver1,
-        'driver2': driver2
+        'driver2': driver2,
+        'drivers': driver_list
     })
 
 @app.get("/compare_teams", response_class=HTMLResponse)

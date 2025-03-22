@@ -8,6 +8,27 @@
 </head>
 <body>
     <h1>Compare Drivers</h1>
+    <form action="/compare_drivers" method="post">
+        <label for="driver1">Driver 1:</label>
+        <select name="driver1" id="driver1" required>
+            <option value="" disabled selected>Select</option>
+            {% for driver in drivers %}
+                <option value="{{ driver.id }}">{{ driver.name }}</option>
+            {% endfor %}
+        </select>
+        
+        <label for="driver2">Driver 2:</label>
+        <select name="driver2" id="driver2" required>
+            <option value="" disabled selected>Select</option>
+            {% for driver in drivers %}
+                <option value="{{ driver.id }}">{{ driver.name }}</option>
+            {% endfor %}
+        </select>
+        
+        <button type="submit">Compare Drivers</button>
+    </form>
+    
+    {% if driver1 and driver2 %}
     <table>
         <tbody>
             <tr>
@@ -47,5 +68,6 @@
             </tr>
         </tbody>
     </table>
+    {% endif %}
 </body>
 </html>
