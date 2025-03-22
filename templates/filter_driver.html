@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/styles.css">
+    <title>Filter Drivers</title>
+</head>
+<body>
+    <h1>Filter Drivers</h1>
+    <form action="/filter_driver" method="post">
+        <label for="attribute">Attribute:</label>
+        <select name="attribute" id="attribute">
+            <option value="name">Name</option>
+            <option value="age">Age</option>
+            <option value="total_pole_positions">Total Pole Positions</option>
+            <option value="total_race_wins">Total Race Wins</option>
+            <option value="total_points">Total Points</option>
+            <option value="total_world_titles">Total World Titles</option>
+            <option value="total_fastest_laps">Total Fastest Laps</option>
+            <option value="team">Team</option>
+        </select>  
+        <label for="comparison">Comparison:</label>
+        <select name="comparison" id="comparison">
+            <option value="==">Equal</option>
+            <option value="<">Less Than</option>
+            <option value=">">Greater Than</option>
+        </select>
+        
+        <label for="value">Value:</label>
+        <input type="text" name="value" id="value" required>
+        
+        <button type="submit">Filter</button>
+    </form>
+
+    <h2>Available Drivers</h2>
+    <ul>
+        {% for driver in drivers %}
+            <li>{{ driver.name }}</li>
+        {% endfor %}
+    </ul>
+
+    <a href="/">Back to Home</a>
+</body>
+</html>

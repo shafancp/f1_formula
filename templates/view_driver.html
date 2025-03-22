@@ -19,12 +19,13 @@
         <label for="driver2">Select Driver 2:</label>
         <select name="driver2" id="driver2" required>
             {% for driver in drivers %}
-                <option value="{{ driver.id }}">{{ driver.name }}</option>
+                <option value="{{ driver.id }}">{{ driver.name }}</option>s
             {% endfor %}
         </select>
         
         <button type="submit">Compare Drivers</button>
     </form>
+    <button onclick="location.href='/filter_driver'">Filter</button>
     <button onclick="location.href='/add_driver'">Add Driver</button>
     <table id="drivers-table">
         <thead>
@@ -40,31 +41,6 @@
             {% endfor %}
         </tbody>
     </table>
-            <h3>Filter Drivers</h3>
-            <form id="filter-form" action="/query_driver" method="POST">
-                <label for="attribute">Select Attribute:</label>
-                <select id="attribute" name="attribute" required>
-                    <option value="age">Age</option>
-                    <option value="total_pole_positions">Total Pole Positions</option>
-                    <option value="total_race_wins">Total Race Wins</option>
-                    <option value="total_points">Total Points</option>
-                    <option value="total_world_titles">Total World Titles</option>
-                    <option value="total_fastest_laps">Total Fastest Laps</option>
-                </select>
-
-                <label for="comparison">Comparison:</label>
-                <select id="comparison" name="comparison" required>
-                    <option value="=">Equal</option>
-                    <option value="<">Less than</option>
-                    <option value=">">Greater than</option>
-                </select>
-
-                <label for="value">Value:</label>
-                <input type="number" id="value" name="value" required>
-
-                <button type="submit">Apply Filter</button>
-            </form>
-    
     <script>
         function searchDrivers() {
             const input = document.getElementById('search-bar');

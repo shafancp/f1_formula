@@ -163,43 +163,31 @@ async def edit_driver(driver_id: str, request: Request):
 
     return {"message": "Driver updated successfully!"}
 
-@app.post("/query_driver")
-async def query_driver(request: Request):
+@app.get("/filter_driver", response_class=HTMLResponse)
+async def get_filter_driver(request: Request):
+    drivers = db.collection('drivers').stream()
+    driver_list = [{**driver.to_dict(), "id": driver.id} for driver in drivers]
+    return templates.TemplateResponse('filter_driver.html', {
+        'request': request,
+        'drivers': driver_list
+    })
+    
+
+@app.post("/filter_driver")
+async def filter_driver(request: Request):
     # Read parameters from form data
     form_data = await request.form()
     attribute = form_data.get("attribute")
     comparison = form_data.get("comparison")
     value = form_data.get("value")
-
-    if not attribute or not comparison or not value:
-        return JSONResponse(content={"error": "Missing parameters"}, status_code=400)
-
-    # Convert value to number if applicable
-    try:
-        value = int(value)
-    except ValueError:
-        pass  # Keep as string if conversion fails
-
-    # Map comparison symbols to Firestore operators
-    comparison_operators = {
-        "=": "==",
-        "<": "<",
-        ">": ">"
-    }
-    # Validate comparison operator
-    if comparison not in comparison_operators:
-        return JSONResponse(content={"error": "Invalid comparison operator"}, status_code=400)
-
-    # Build Firestore query based on the provided parameters
-    driver_ref = db.collection("drivers")
-    query = driver_ref.where(attribute, comparison_operators[comparison], value)
-
-    # Fetch results
-    results = query.stream()
-    drivers = [{"id": doc.id, **doc.to_dict()} for doc in results]
-    return templates.TemplateResponse('view_driver.html', {
+    drivers_ref = db.collection("drivers")
+    query = drivers_ref.where(attribute, comparison, value)
+    drivers = query.stream()
+    driver_list = [{**driver.to_dict(), "id": driver.id} for driver in drivers]
+    
+    return templates.TemplateResponse('filter_driver.html', {
         'request': request,
-        'drivers': drivers
+        'drivers': driver_list
     })
 
 
