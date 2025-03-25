@@ -4,21 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/styles.css">
-    <title>Filter Drivers</title>
+    <title>Filter Teams</title>
 </head>
 <body>
-    <h1>Filter Drivers</h1>
-    <form action="/filter_driver" method="post">
+    <h1>Filter Teams</h1>
+    <form action="/filter_team" method="post">
         <label for="attribute">Attribute:</label>
         <select name="attribute" id="attribute">
-            <option value="name">Name</option>
-            <option value="age">Age</option>
+            <option value="team_name">Team Name</option>
+            <option value="year_founded">Year Founded</option>
             <option value="total_pole_positions">Total Pole Positions</option>
             <option value="total_race_wins">Total Race Wins</option>
-            <option value="total_points">Total Points</option>
-            <option value="total_world_titles">Total World Titles</option>
-            <option value="total_fastest_laps">Total Fastest Laps</option>
-            <option value="team">Team</option>
+            <option value="total_constructor_titles">Total Constructor Titles</option>
+            <option value="finishing_position">Finishing Position</option>
         </select>  
         <label for="comparison">Comparison:</label>
         <select name="comparison" id="comparison">
@@ -33,13 +31,13 @@
         <button type="submit">Filter</button>
     </form>
 
-    <h2>Available Drivers</h2>
+    <h2>Available Teams</h2>
     <ul>
-        {% for driver in drivers %}
-            <li><a href="/driver_details?id={{ driver.id }}">{{ driver.name }}</a></li>
+        {% for team in teams %}
+            <li><a href="/view_team?id={{ team.id }}">{{ team.team_name }}</a></li>
         {% endfor %}
     </ul>
 
-    <a href="/view_driver">Back</a>
+    <a href="/view_team">Back</a>
 </body>
 </html>

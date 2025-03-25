@@ -7,7 +7,7 @@
 </head>
 <body>
     <h2>Edit Driver</h2>
-    <form method="post" action="/edit_driver/{{ driver['id'] }}">
+    <form method="post" action="/edit_driver">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" value="{{ driver.name }}" required>
         
@@ -30,9 +30,14 @@
         <input type="number" id="total_fastest_laps" name="total_fastest_laps" value="{{ driver.total_fastest_laps }}" required>
         
         <label for="team">Team:</label>
-        <input type="text" id="team" name="team" value="{{ driver.team }}" required>
-        
+        <select name="team" id="team" required>
+            {% for team in teams %}
+                <option value="{{ team.id }}">{{ team.team_name }}</option>
+            {% endfor %}
+        </select>
+        <input type="hidden" name="id" value="{{ driver.id }}">
         <button type="submit">Update Driver</button>
     </form>
 </body>
+
 </html>

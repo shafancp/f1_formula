@@ -8,12 +8,8 @@
 <body>
     <h2>Driver Details</h2>
     <div id="driver-info">
-        {% if is_logged_in %}
             <button onclick="location.href='/edit_driver?id={{ driver.id }}'">Edit</button>
-            <form method="post" action="/delete_driver/{{ driver.id }}">
-                <button type="submit">Delete</button>
-            </form>
-        {% endif %}
+            <button onclick="location.href='/delete_driver?id={{ driver.id }}'">Delete</button>
         <p><strong>Name:</strong> {{ driver.name }}</p>
         <p><strong>Age:</strong> {{ driver.age }}</p>
         <p><strong>Total Pole Positions:</strong> {{ driver.total_pole_positions }}</p>

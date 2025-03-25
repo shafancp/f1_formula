@@ -9,25 +9,9 @@
 <body>
     <h2>Teams</h2>
     <input type="text" id="search-bar" placeholder="Search teams..." onkeyup="searchTeams()"><br>
-    <form action="/compare_teams" method="get">
-        <label for="team1">Select Team 1:</label>
-        <select name="team1" id="team1" required>
-            {% for team in teams %}
-                <option value="{{ team.id }}">{{ team.team_name }}</option>
-            {% endfor %}
-        </select>
-        
-        <label for="team2">Select Team 2:</label>
-        <select name="team2" id="team2" required>
-            {% for team in teams %}
-                <option value="{{ team.id }}">{{ team.team_name }}</option>
-            {% endfor %}
-        </select>
-        
-        <button type="submit">Compare Team</button>
-    </form>
     <button onclick="location.href='/add_team'">Add Team</button>
-
+    <button onclick="location.href='/filter_team'">Filter</button>
+    <button onclick="location.href='/compare_teams'">Compare Team</button>
     <table id="teams-table">
         <thead>
             <tr>
