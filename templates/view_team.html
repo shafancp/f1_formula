@@ -8,7 +8,7 @@
 </head>
 <body>
     <h2>Teams</h2>
-    <input type="text" id="search-bar" placeholder="Search teams..." onkeyup="searchTeams()"><br>
+    <input type="text" id="search-bar" placeholder="Search teams..." onkeyup="searchTeams()">
     <button onclick="location.href='/add_team'">Add Team</button>
     <button onclick="location.href='/filter_team'">Filter</button>
     <button onclick="location.href='/compare_teams'">Compare Team</button>
@@ -26,6 +26,7 @@
             {% endfor %}
         </tbody>
     </table>
+    <a href="/">Back</a>
     <script>
         function searchTeams() {
             const input = document.getElementById('search-bar');

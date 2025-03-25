@@ -229,11 +229,19 @@ async def edit_team(request: Request):
         "total_constructor_titles": form.get("total_constructor_titles"),
         "finishing_position": form.get("finishing_position")
         }
-
-    db.collection('teams').document(team_id).update(team_data)  # Ensure no trailing slashes
-
+    db.collection('teams').document(team_id).update(team_data)
     return RedirectResponse(url=f"/team_details?id={team_id}", status_code=303)
 
+
+@app.get("/delete_team")
+async def delete_team(request: Request):
+    team_id = request.query_params.get("id")
+    id_token = request.cookies.get("token")
+    is_logged_in = validateFirebaseToken(id_token)
+    if not is_logged_in:
+        return templates.TemplateResponse('login.html', {'request': request})
+    db.collection('teams').document(team_id).delete()
+    return RedirectResponse("/view_team", status_code=303)
 
 @app.get("/compare_drivers", response_class=HTMLResponse)
 async def compare_drivers_get(request: Request):
