@@ -8,9 +8,10 @@
 </head>
 <body>
     <h1>Compare Teams</h1>
-    <form action="/compare_teams" method="get">
+    <form action="/compare_teams" method="post">
         <label for="team1">Select Team 1:</label>
         <select name="team1" id="team1" required>
+            <option value="" disabled selected>Select</option>
             {% for team in teams %}
                 <option value="{{ team.id }}">{{ team.team_name }}</option>
             {% endfor %}
@@ -18,12 +19,14 @@
         
         <label for="team2">Select Team 2:</label>
         <select name="team2" id="team2" required>
+            <option value="" disabled selected>Select</option>
             {% for team in teams %}
                 <option value="{{ team.id }}">{{ team.team_name }}</option>
             {% endfor %}
         </select>
         <button type="submit">Compare Team</button>
     </form>
+    {% if team1 and team2 %}
     <table>
         <tbody>
             <tr>
@@ -58,5 +61,7 @@
             </tr>
         </tbody>
     </table>
+    {% endif %}
+    <a href="/view_team">Back</a>
 </body>
 </html>

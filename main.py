@@ -217,16 +217,27 @@ async def compare_drivers_post(request: Request):
         'drivers': driver_list
     })
 
+
 @app.get("/compare_teams", response_class=HTMLResponse)
+async def compare_drivers_get(request: Request):
+    teams = db.collection('teams').stream()
+    team_list = [{**team.to_dict(), "id": team.id} for team in teams]
+    return templates.TemplateResponse('compare_teams.html', {'request': request, 'teams': team_list })
+
+@app.post("/compare_teams", response_class=HTMLResponse)
 async def compare_teams(request: Request):
-    team1_id = request.query_params.get("team1")
-    team2_id = request.query_params.get("team2")
+    form_data = await request.form()
+    team1_id = form_data.get("team1")
+    team2_id = form_data.get("team2")
 
     team1 = db.collection("teams").document(team1_id).get().to_dict()
     team2 = db.collection("teams").document(team2_id).get().to_dict()
+    teams = db.collection('teams').stream()
+    team_list = [{**team.to_dict(), "id": team.id} for team in teams]
 
     return templates.TemplateResponse('compare_teams.html', {
         'request': request,
         'team1': team1,
-        'team2': team2
+        'team2': team2,
+        'teams': team_list
     })
