@@ -49,11 +49,9 @@ async def login(request: Request):
 
 @app.get("/view_driver", response_class=HTMLResponse)
 async def view_driver(request: Request):
-    id_token = request.cookies.get("token")
-    is_logged_in = validateFirebaseToken(id_token)
     drivers = db.collection('drivers').stream()
     driver_list = [{**driver.to_dict(), "id": driver.id} for driver in drivers]
-    return templates.TemplateResponse('view_driver.html', {'request': request, 'drivers': driver_list, 'is_logged_in': is_logged_in})
+    return templates.TemplateResponse('view_driver.html', {'request': request, 'drivers': driver_list})
 
 @app.get("/delete_driver")
 async def delete_driver(request: Request):
@@ -71,6 +69,7 @@ async def add_driver(request: Request):
     is_logged_in = validateFirebaseToken(id_token)
     if not is_logged_in:
         return templates.TemplateResponse('login.html', {'request': request})
+    
     teams = db.collection('teams').stream()
     team_list = [{**team.to_dict(), "id": team.id} for team in teams]
     return templates.TemplateResponse('add_driver.html', {'request': request, 'teams' : team_list})
@@ -78,6 +77,12 @@ async def add_driver(request: Request):
 @app.post("/add_driver")
 async def add_driver(request: Request):
     form = await request.form()
+    driver_name = form.get("name").lower()
+    existing_drivers = db.collection('drivers').stream()
+    existing_driver_names = [driver.to_dict().get("name").lower() for driver in existing_drivers]
+    if driver_name in existing_driver_names:
+        return HTMLResponse("""<script> alert("Driver already exists!"); window.location.href = "/add_driver"; </script> """)
+    
     driver_data = {
         "name": form.get("name"),
         "age": form.get("age"),
@@ -90,6 +95,7 @@ async def add_driver(request: Request):
     }
     db.collection('drivers').add(driver_data)
     return HTMLResponse("""<script> alert("Added Driver successfully!"); window.location.href = "/view_driver"; </script> """)
+
 
 @app.get("/driver_details", response_class=HTMLResponse)
 async def driver_details(request: Request):
@@ -191,6 +197,12 @@ async def add_team_post(request: Request):
         return templates.TemplateResponse('login.html', {'request': request})
 
     form = await request.form()
+    team_name = form.get("team_name").lower()
+    existing_teams = db.collection('teams').stream()
+    existing_team_names = [team.to_dict().get("team_name").lower() for team in existing_teams]
+    if team_name in existing_team_names:
+        return HTMLResponse("""<script> alert("Team already exists!"); window.location.href = "/add_team"; </script> """)
+
     team_data = {
         "team_name": form.get("team_name"),
         "year_founded": form.get("year_founded"),
@@ -200,7 +212,7 @@ async def add_team_post(request: Request):
         "finishing_position": form.get("finishing_position")
     }
     db.collection('teams').add(team_data)
-    return HTMLResponse("""<script> alert("Added Driver successfully!"); window.location.href = "/view_team"; </script> """)
+    return HTMLResponse("""<script> alert("Added Team successfully!"); window.location.href = "/view_team"; </script> """)
 
 
 @app.get("/edit_team", response_class=HTMLResponse)
@@ -254,6 +266,9 @@ async def compare_drivers_post(request: Request):
     form_data = await request.form()
     driver1_id = form_data.get("driver1")
     driver2_id = form_data.get("driver2")
+    
+    if driver1_id == driver2_id:
+        return HTMLResponse("""<script> alert("You cannot select the same driver for both options!"); window.location.href = "/compare_drivers"; </script> """)
 
     driver1 = db.collection("drivers").document(driver1_id).get().to_dict()
     driver2 = db.collection("drivers").document(driver2_id).get().to_dict()
@@ -274,6 +289,9 @@ async def compare_teams(request: Request):
     form_data = await request.form()
     team1_id = form_data.get("team1")
     team2_id = form_data.get("team2")
+
+    if team1_id == team2_id:
+        return HTMLResponse("""<script> alert("You cannot select the same team for both options!"); window.location.href = "/compare_teams"; </script> """)
 
     team1 = db.collection("teams").document(team1_id).get().to_dict()
     team2 = db.collection("teams").document(team2_id).get().to_dict()
