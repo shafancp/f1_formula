@@ -34,7 +34,7 @@
     <h2>Available Teams</h2>
     <ul>
         {% for team in teams %}
-            <li><a href="/view_team?id={{ team.id }}">{{ team.team_name }}</a></li>
+            <li><a href="/team_details?id={{ team.id }}">{{ team.team_name }}</a></li>
         {% endfor %}
     </ul>
 

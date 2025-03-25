@@ -165,6 +165,15 @@ async def view_team(request: Request):
     team_list = [{**team.to_dict(), "id": team.id} for team in teams]
     return templates.TemplateResponse('view_team.html', {'request': request, 'teams': team_list, 'is_logged_in': is_logged_in })
 
+@app.get("/team_details", response_class=HTMLResponse)
+async def team_details(request: Request):
+    team_id = request.query_params.get("id")
+    team_ref = db.collection("teams").document(team_id)
+    team = team_ref.get()
+    team_data = team.to_dict()
+    team_data["id"] = team.id
+    return templates.TemplateResponse('team_details.html', {'request': request, 'team': team_data})
+
 @app.get("/add_team", response_class=HTMLResponse)
 async def add_team(request: Request):
     id_token = request.cookies.get("token")
@@ -193,6 +202,39 @@ async def add_team_post(request: Request):
     db.collection('teams').add(team_data)
     return HTMLResponse("""<script> alert("Added Driver successfully!"); window.location.href = "/view_team"; </script> """)
 
+
+@app.get("/edit_team", response_class=HTMLResponse)
+async def edit_team(request: Request):
+    id_token = request.cookies.get("token")
+    is_logged_in = validateFirebaseToken(id_token)
+    if not is_logged_in:
+        return templates.TemplateResponse('login.html', {'request': request})
+    team_id = request.query_params.get("id")
+    team_ref = db.collection('teams').document(team_id)
+    team = team_ref.get()
+    team_data = team.to_dict()
+    team_data["id"] = team.id 
+    return templates.TemplateResponse('edit_team.html', {'request': request, 'team': team_data})
+
+
+@app.post("/edit_team")
+async def edit_team(request: Request):
+    form = await request.form()
+    team_id = form.get("id")
+    team_data = {
+        "team_name": form.get("team_name"),
+        "year_founded": form.get("year_founded"),
+        "total_pole_positions": form.get("total_pole_positions"),
+        "total_race_wins": form.get("total_race_wins"),
+        "total_constructor_titles": form.get("total_constructor_titles"),
+        "finishing_position": form.get("finishing_position")
+        }
+
+    db.collection('teams').document(team_id).update(team_data)  # Ensure no trailing slashes
+
+    return RedirectResponse(url=f"/team_details?id={team_id}", status_code=303)
+
+
 @app.get("/compare_drivers", response_class=HTMLResponse)
 async def compare_drivers_get(request: Request):
     drivers = db.collection('drivers').stream()
@@ -210,16 +252,11 @@ async def compare_drivers_post(request: Request):
     drivers = db.collection('drivers').stream()
     driver_list = [{**driver.to_dict(), "id": driver.id} for driver in drivers]
 
-    return templates.TemplateResponse('compare_drivers.html', {
-        'request': request,
-        'driver1': driver1,
-        'driver2': driver2,
-        'drivers': driver_list
-    })
+    return templates.TemplateResponse('compare_drivers.html', {'request': request, 'driver1': driver1, 'driver2': driver2, 'drivers': driver_list})
 
 
 @app.get("/compare_teams", response_class=HTMLResponse)
-async def compare_drivers_get(request: Request):
+async def compare_teams_get(request: Request):
     teams = db.collection('teams').stream()
     team_list = [{**team.to_dict(), "id": team.id} for team in teams]
     return templates.TemplateResponse('compare_teams.html', {'request': request, 'teams': team_list })
@@ -235,9 +272,22 @@ async def compare_teams(request: Request):
     teams = db.collection('teams').stream()
     team_list = [{**team.to_dict(), "id": team.id} for team in teams]
 
-    return templates.TemplateResponse('compare_teams.html', {
-        'request': request,
-        'team1': team1,
-        'team2': team2,
-        'teams': team_list
-    })
+    return templates.TemplateResponse('compare_teams.html', {'request': request,'team1': team1,'team2': team2,'teams': team_list})
+
+@app.get("/filter_team", response_class=HTMLResponse)
+async def get_filter_team(request: Request):
+    teams = db.collection('teams').stream()
+    team_list = [{**team.to_dict(), "id": team.id} for team in teams]
+    return templates.TemplateResponse('filter_team.html', {'request': request, 'teams': team_list })
+
+@app.post("/filter_team")
+async def filter_team(request: Request):
+    form_data = await request.form()
+    attribute = form_data.get("attribute")
+    comparison = form_data.get("comparison")
+    value = form_data.get("value")
+    teams_ref = db.collection("teams")
+    query = teams_ref.where(attribute, comparison, value)
+    teams = query.stream()
+    team_list = [{**team.to_dict(), "id": team.id} for team in teams]
+    return templates.TemplateResponse('filter_team.html', {'request': request, 'teams': team_list})

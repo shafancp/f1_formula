@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Team</title>
+</head>
+<body>
+    <h2>Edit Team</h2>
+    <form method="post" action="/edit_team">
+        <label for="team_name">Team Name:</label>
+        <input type="text" id="team_name" name="team_name" value="{{ team.team_name }}" required>
+        
+        <label for="year_founded">Year Founded:</label>
+        <input type="number" id="year_founded" name="year_founded" value="{{ team.year_founded }}" required>
+        
+        <label for="total_pole_positions">Total Pole Positions:</label>
+        <input type="number" id="total_pole_positions" name="total_pole_positions" value="{{ team.total_pole_positions }}" required>
+        
+        <label for="total_race_wins">Total Race Wins:</label>
+        <input type="number" id="total_race_wins" name="total_race_wins" value="{{ team.total_race_wins }}" required>
+        
+        <label for="total_constructor_titles">Total Constructor Titles:</label>
+        <input type="number" id="total_constructor_titles" name="total_constructor_titles" value="{{ team.total_constructor_titles }}" required>
+        
+        <label for="finishing_position">Finishing Position:</label>
+        <input type="number" id="finishing_position" name="finishing_position" value="{{ team.finishing_position }}" required>
+        
+        <input type="hidden" name="id" value="{{ team.id }}">
+        <button type="submit">Update Team</button>
+    </form>
+</body>
+</html>

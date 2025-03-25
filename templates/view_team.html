@@ -16,14 +16,12 @@
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Year Founded</th>
             </tr>
         </thead>
         <tbody>
             {% for team in teams %}
                 <tr>
-                    <td>{{ team.team_name }}</td>
-                    <td>{{ team.year_founded}}</td>
+                    <td><a href="/team_details?id={{ team.id }}">{{ team.team_name }}</a></td>
                 </tr>
             {% endfor %}
         </tbody>
