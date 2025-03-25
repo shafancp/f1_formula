@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>F1 Drivers and Teams</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
     <script type="module" src="{{ url_for('static', path='/firebase-login.js') }}"defer></script>
 </head>
 <body>
@@ -13,7 +14,8 @@
     <div id="user-info">
         {% if is_logged_in %}
             <p>Welcome, User!</p>
-            <div id="add-buttons">            </div>
+            <div id="add-buttons">
+            </div>
             <div>
                 <button id="logout-link">Logout</button>
             </div>

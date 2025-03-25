@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Driver</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
 </head>
 <body>
     <h2>Edit Driver</h2>
@@ -40,5 +41,4 @@
     </form>
     <a href="/driver_details?id={{ driver.id }}">Back</a>
 </body>
-
 </html>
