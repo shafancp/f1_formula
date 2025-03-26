@@ -37,6 +37,9 @@ if (loginButton) {
             })
             .catch((error) => {
                 console.log(error.code + error.message);
+                const alertDiv = document.getElementById("alert");
+                alertDiv.innerText = "Incorrect email or password. Please try again."; // Show alert
+                alertDiv.style.display = "block"; // Display the alert
             });
     });
 }

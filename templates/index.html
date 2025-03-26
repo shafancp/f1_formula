@@ -11,9 +11,11 @@
 <body>
     <h1>F1 Drivers and Teams</h1>
 
+    <a href="/view_driver">Drivers</a><br>
+    <a href="/view_team">Teams</a>
+
     <div id="user-info">
         {% if is_logged_in %}
-            <p>Welcome, User!</p>
             <div id="add-buttons">
             </div>
             <div>
@@ -26,7 +28,5 @@
             </div>
         {% endif %}
     </div>
-    <a href="/view_driver">Drivers</a><br>
-    <a href="/view_team">Teams</a>
 </body>
 </html>
