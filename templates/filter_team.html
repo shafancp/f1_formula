@@ -11,7 +11,6 @@
     <form action="/filter_team" method="post">
         <label for="attribute">Attribute:</label>
         <select name="attribute" id="attribute">
-            <option value="team_name">Team Name</option>
             <option value="year_founded">Year Founded</option>
             <option value="total_pole_positions">Total Pole Positions</option>
             <option value="total_race_wins">Total Race Wins</option>
@@ -32,6 +31,9 @@
     </form>
 
     <h2>Available Teams</h2>
+    {% if not teams %}
+    <P>No Teams Available</P>
+    {% endif %}
     <ul>
         {% for team in teams %}
             <li><a href="/team_details?id={{ team.id }}">{{ team.team_name }}</a></li>

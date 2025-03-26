@@ -20,7 +20,7 @@ db = firestore.Client()
 app.mount('/static', StaticFiles(directory='static'), name='static')
 templates = Jinja2Templates(directory="templates")
 
-#function that we will use to validate an id_token. will return the user_token if valid, None if not
+#function that we will use to validate an id_token
 def validateFirebaseToken(id_token):
     if not id_token:
         return False  # or None
@@ -45,7 +45,7 @@ async def login(request: Request):
         if is_logged_in:
             response = templates.TemplateResponse('index.html', {'request': request})
             return response
-    return templates.TemplateResponse('login.html', {'request': request, 'error': 'Invalid token'})
+    return templates.TemplateResponse('login.html', {'request': request, 'error': 'Incorrect email or password. Please try again.'})
 
 @app.get("/view_driver", response_class=HTMLResponse)
 async def view_driver(request: Request):
@@ -75,7 +75,7 @@ async def add_driver(request: Request):
     return templates.TemplateResponse('add_driver.html', {'request': request, 'teams' : team_list})
 
 @app.post("/add_driver")
-async def add_driver(request: Request):
+async def add_driver_post(request: Request):
     form = await request.form()
     driver_name = form.get("name").lower()
     existing_drivers = db.collection('drivers').stream()
@@ -85,12 +85,12 @@ async def add_driver(request: Request):
     
     driver_data = {
         "name": form.get("name"),
-        "age": form.get("age"),
-        "total_pole_positions": form.get("total_pole_positions"),
-        "total_race_wins": form.get("total_race_wins"),
-        "total_points": form.get("total_points"),
-        "total_world_titles": form.get("total_world_titles"),
-        "total_fastest_laps": form.get("total_fastest_laps"),
+        "age": int(form.get("age")),
+        "total_pole_positions": int(form.get("total_pole_positions")),
+        "total_race_wins": int(form.get("total_race_wins")),
+        "total_points": int(form.get("total_points")),
+        "total_world_titles": int(form.get("total_world_titles")),
+        "total_fastest_laps": int(form.get("total_fastest_laps")),
         "team": form.get("team")
     }
     db.collection('drivers').add(driver_data)
@@ -126,17 +126,17 @@ async def edit_driver(request: Request):
     return templates.TemplateResponse('edit_driver.html', {'request': request, 'driver': driver_data, 'teams': team_list})
 
 @app.post("/edit_driver")
-async def edit_driver(request: Request):
+async def edit_driver_post(request: Request):
     form = await request.form()
     driver_id = form.get("id")
     driver_data = {
         "name": form.get("name"),
-        "age": form.get("age"),
-        "total_pole_positions": form.get("total_pole_positions"),
-        "total_race_wins": form.get("total_race_wins"),
-        "total_points": form.get("total_points"),
-        "total_world_titles": form.get("total_world_titles"),
-        "total_fastest_laps": form.get("total_fastest_laps"),
+        "age": int(form.get("age")),
+        "total_pole_positions": int(form.get("total_pole_positions")),
+        "total_race_wins": int(form.get("total_race_wins")),
+        "total_points": int(form.get("total_points")),
+        "total_world_titles": int(form.get("total_world_titles")),
+        "total_fastest_laps": int(form.get("total_fastest_laps")),
         "team": form.get("team")
         }
 
@@ -144,18 +144,18 @@ async def edit_driver(request: Request):
     return RedirectResponse(url=f"/driver_details?id={driver_id}", status_code=303)
 
 @app.get("/filter_driver", response_class=HTMLResponse)
-async def get_filter_driver(request: Request):
+async def filter_driver(request: Request):
     drivers = db.collection('drivers').stream()
     driver_list = [{**driver.to_dict(), "id": driver.id} for driver in drivers]
     return templates.TemplateResponse('filter_driver.html', {'request': request, 'drivers': driver_list })
     
 
 @app.post("/filter_driver")
-async def filter_driver(request: Request):
+async def filter_driver_post(request: Request):
     form_data = await request.form()
     attribute = form_data.get("attribute")
     comparison = form_data.get("comparison")
-    value = form_data.get("value")
+    value = int(form_data.get("value"))
     drivers_ref = db.collection("drivers")
     query = drivers_ref.where(attribute, comparison, value)
     drivers = query.stream()
@@ -205,11 +205,11 @@ async def add_team_post(request: Request):
 
     team_data = {
         "team_name": form.get("team_name"),
-        "year_founded": form.get("year_founded"),
-        "total_pole_positions": form.get("total_pole_positions"),
-        "total_race_wins": form.get("total_race_wins"),
-        "total_constructor_titles": form.get("total_constructor_titles"),
-        "finishing_position": form.get("finishing_position")
+        "year_founded": int(form.get("year_founded")),
+        "total_pole_positions": int(form.get("total_pole_positions")),
+        "total_race_wins": int(form.get("total_race_wins")),
+        "total_constructor_titles": int(form.get("total_constructor_titles")),
+        "finishing_position": int(form.get("finishing_position"))
     }
     db.collection('teams').add(team_data)
     return HTMLResponse("""<script> alert("Added Team successfully!"); window.location.href = "/view_team"; </script> """)
@@ -230,16 +230,16 @@ async def edit_team(request: Request):
 
 
 @app.post("/edit_team")
-async def edit_team(request: Request):
+async def edit_team_post(request: Request):
     form = await request.form()
     team_id = form.get("id")
     team_data = {
-        "team_name": form.get("team_name"),
-        "year_founded": form.get("year_founded"),
-        "total_pole_positions": form.get("total_pole_positions"),
-        "total_race_wins": form.get("total_race_wins"),
-        "total_constructor_titles": form.get("total_constructor_titles"),
-        "finishing_position": form.get("finishing_position")
+        "team_name": int(form.get("team_name")),
+        "year_founded": int(form.get("year_founded")),
+        "total_pole_positions": int(form.get("total_pole_positions")),
+        "total_race_wins": int(form.get("total_race_wins")),
+        "total_constructor_titles": int(form.get("total_constructor_titles")),
+        "finishing_position": int(form.get("finishing_position"))
         }
     db.collection('teams').document(team_id).update(team_data)
     return RedirectResponse(url=f"/team_details?id={team_id}", status_code=303)
@@ -256,7 +256,7 @@ async def delete_team(request: Request):
     return RedirectResponse("/view_team", status_code=303)
 
 @app.get("/compare_drivers", response_class=HTMLResponse)
-async def compare_drivers_get(request: Request):
+async def compare_drivers(request: Request):
     drivers = db.collection('drivers').stream()
     driver_list = [{**driver.to_dict(), "id": driver.id} for driver in drivers]
     return templates.TemplateResponse('compare_drivers.html', {'request': request, 'drivers': driver_list })
@@ -279,13 +279,13 @@ async def compare_drivers_post(request: Request):
 
 
 @app.get("/compare_teams", response_class=HTMLResponse)
-async def compare_teams_get(request: Request):
+async def compare_teams(request: Request):
     teams = db.collection('teams').stream()
     team_list = [{**team.to_dict(), "id": team.id} for team in teams]
     return templates.TemplateResponse('compare_teams.html', {'request': request, 'teams': team_list })
 
 @app.post("/compare_teams", response_class=HTMLResponse)
-async def compare_teams(request: Request):
+async def compare_teams_post(request: Request):
     form_data = await request.form()
     team1_id = form_data.get("team1")
     team2_id = form_data.get("team2")
@@ -301,17 +301,17 @@ async def compare_teams(request: Request):
     return templates.TemplateResponse('compare_teams.html', {'request': request,'team1': team1,'team2': team2,'teams': team_list})
 
 @app.get("/filter_team", response_class=HTMLResponse)
-async def get_filter_team(request: Request):
+async def filter_team(request: Request):
     teams = db.collection('teams').stream()
     team_list = [{**team.to_dict(), "id": team.id} for team in teams]
     return templates.TemplateResponse('filter_team.html', {'request': request, 'teams': team_list })
 
 @app.post("/filter_team")
-async def filter_team(request: Request):
+async def filter_team_post(request: Request):
     form_data = await request.form()
     attribute = form_data.get("attribute")
     comparison = form_data.get("comparison")
-    value = form_data.get("value")
+    value = int(form_data.get("value"))
     teams_ref = db.collection("teams")
     query = teams_ref.where(attribute, comparison, value)
     teams = query.stream()
