@@ -7,11 +7,8 @@
     <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
 </head>
 <body>
-    <h2>Driver Details</h2>
     <div id="driver-info">
-            <button onclick="location.href='/edit_driver?id={{ driver.id }}'">Edit</button>
-            <button onclick="location.href='/delete_driver?id={{ driver.id }}'">Delete</button>
-        <p><strong>Name:</strong> {{ driver.name }}</p>
+        <h1><strong>Name:</strong> {{ driver.name }}</h1>
         <p><strong>Age:</strong> {{ driver.age }}</p>
         <p><strong>Total Pole Positions:</strong> {{ driver.total_pole_positions }}</p>
         <p><strong>Total Race Wins:</strong> {{ driver.total_race_wins }}</p>
@@ -19,6 +16,8 @@
         <p><strong>Total World Titles:</strong> {{ driver.total_world_titles }}</p>
         <p><strong>Total Fastest Laps:</strong> {{ driver.total_fastest_laps }}</p>
         <p><strong>Team:</strong> {{ driver.team_name }}</p>
+        <button onclick="location.href='/edit_driver?id={{ driver.id }}'">Edit</button>
+        <button onclick="location.href='/delete_driver?id={{ driver.id }}'">Delete</button>
     </div><br><br>
     <a href="/view_driver">Back</a>
 </body>

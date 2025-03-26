@@ -39,13 +39,7 @@ async def root(request: Request):
 
 @app.get("/login", response_class=HTMLResponse)
 async def login(request: Request):
-    if request.method == "POST":
-        id_token = request.cookies.get("token")
-        is_logged_in = validateFirebaseToken(id_token)
-        if is_logged_in:
-            response = templates.TemplateResponse('index.html', {'request': request})
-            return response
-    return templates.TemplateResponse('login.html', {'request': request, 'error': 'Incorrect email or password. Please try again.'})
+    return templates.TemplateResponse('login.html', {'request': request})
 
 @app.get("/view_driver", response_class=HTMLResponse)
 async def view_driver(request: Request):
@@ -234,7 +228,7 @@ async def edit_team_post(request: Request):
     form = await request.form()
     team_id = form.get("id")
     team_data = {
-        "team_name": int(form.get("team_name")),
+        "team_name": form.get("team_name"),
         "year_founded": int(form.get("year_founded")),
         "total_pole_positions": int(form.get("total_pole_positions")),
         "total_race_wins": int(form.get("total_race_wins")),

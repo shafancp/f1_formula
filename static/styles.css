@@ -1,5 +1,5 @@
 .highlight {
-    background-color: #007bff; /* Highlight color */
+    background-color: #CCFFCC; /* Highlight color */
     font-weight: bold; /* Optional: make the text bold */
 }
 
@@ -16,7 +16,7 @@ h1, h2, h3 {
 }
 
 button {
-    background-color: #007bff; /* Bootstrap primary color */
+    background-color: #AF0034; /* Bootstrap primary color */
     color: white; /* White text */
     border: none; /* Remove border */
     padding: 10px 15px; /* Padding for buttons */
@@ -25,7 +25,7 @@ button {
 }
 
 button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
+    background-color: #730023; /* Darker blue on hover */
 }
 
 a {
@@ -35,7 +35,7 @@ a {
 
 a:hover {
     text-decoration: underline;
-     color: #007bff;
+     color: #AF0034;
 }
 
 /* Basic styling */
@@ -58,7 +58,7 @@ th, td {
 }
 
 th {
-    background-color: #007bff; /* Header background color */
+    background-color: #AF0034; /* Header background color */
     color: white; /* Header text color */
 }
 
@@ -93,7 +93,7 @@ select {
 
 button {
     padding: 10px;
-    background-color: #007bff;
+    background-color: #AF0034;
     color: white;
     border: none;
     border-radius: 4px;
@@ -101,7 +101,7 @@ button {
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #730023;
 }
 
 #alert {
