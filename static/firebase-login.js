@@ -6,12 +6,12 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, si
 
 // Firebase Configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyDx16dcjXdszV6luS7dbE-ZA_Znm5htoZQ",
-    authDomain: "f1-formula-453723.firebaseapp.com",
-    projectId: "f1-formula-453723",
-    storageBucket: "f1-formula-453723.firebasestorage.app",
-    messagingSenderId: "546526556738",
-    appId: "1:546526556738:web:7ff7d8e0f8adde377773db"
+    apiKey: "",
+    authDomain: "",
+    projectId: "",
+    storageBucket: "",
+    messagingSenderId: "",
+    appId: ""
 };
 
 // Initialize Firebase
